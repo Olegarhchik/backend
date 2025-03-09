@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Задание 2</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <main>
+        <div class="container">
+            <h1>Задание 2</h1>
+
+            <div class="point">
+                <p class="point-description">
+                    Перед началом выполнения задания загрузил через Git необходимые файлы на сервер, используя уже знакомую команду <code>git pull</code>, и проверил работоспособность файла index.php с помощью команды <code>php index.php</code>:
+                </p>
+
+                <img src="img/00.png" alt="" class="point-image">
+            </div>
+
+            <div class="point">
+                <p class="point-description">
+                    1. Для обращения к серверу использовал утилиту Telnet и команду <code>telnet 192.168.199.8 80</code>. Далее получил главную страницу методом GET в протоколе HTTP 1.0, введя соответствующий запрос:
+                </p>
+
+                <img src="img/01.png" alt="" class="point-image">
+            </div>
+
+            <div class="point">
+                <p class="point-description">
+                    2. Для запросов в протоколе HTTP 1.1 уже необходимо указывать заголовок Host со значением адреса сервера, в нашем случае это u68861.kubsu-dev.ru. Получим внутреннюю страницу сайта:
+                </p>
+
+                <img src="img/02.png" alt="" class="point-image">
+            </div>
+
+            <div class="point">
+                <p class="point-description">
+                    3. Всю информацию о файле можно получить с помощью метода HEAD. Информацию о размере файла (в байтах) содержит заголовок Content-Length. Узнаем размер файла file.tar.gz:
+                </p>
+
+                <img src="img/03.png" alt="" class="point-image">
+            </div>
+
+            <div class="point">
+                <p class="point-description">
+                    4. Определить медиатип файла поможет заголовок Content-Type. Узнаем медиатип файла image.png:
+                </p>
+
+                <img src="img/04.png" alt="" class="point-image">
+            </div>
+
+            <div class="point">
+                <p class="point-description">
+                    5. Для передачи некоторой информации на сервер используется метод POST. Например, чтоб отправить комментарий на сервер, необходимо прописать два заголовка: <code>Content-Type: application/x-www-form-urlencoded</code> и <code>Content-Length: 28</code> (где 28 — это длина передаваемой строки) — и написать комментарий, пропустив одну строку:
+                </p>
+
+                <img src="img/05.png" alt="" class="point-image">
+            </div>
+
+            <div class="point">
+                <p class="point-description">
+                    6. Получить диапазон байтов [a;b] можно, используя заголовок <code>Range: bytes=a-b</code>. Выведем первые 100 байт файла file.tar.gz:
+                </p>
+
+                <img src="img/06.png" alt="" class="point-image">
+            </div>
+
+            <div class="point">
+                <p class="point-description">
+                    7. Для текстовых файлов заголовок Content-Type содержит еще и кодировку файла. Узнаем ее для файла index.php:
+                </p>
+
+                <img src="img/07.png" alt="" class="point-image">
+            </div>
+        </div>
+    </main>
+</body>
+</html>
