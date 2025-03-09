@@ -37,7 +37,7 @@
 
             <div class="point">
                 <p class="point-description">
-                    3. Всю информацию о файле можно получить с помощью запроса HEAD. Информацию о размере файла (в байтах) содержит заголовок Content-Length. Узнаем размер файла file.tar.gz:
+                    3. Всю информацию о файле можно получить с помощью метода HEAD. Информацию о размере файла (в байтах) содержит заголовок Content-Length. Узнаем размер файла file.tar.gz:
                 </p>
 
                 <img src="img/03.png" alt="" class="point-image">
@@ -49,6 +49,14 @@
                 </p>
 
                 <img src="img/04.png" alt="" class="point-image">
+            </div>
+
+            <div class="point">
+                <p class="point-description">
+                    5. Для передачи некоторой информации на сервер используется метод POST. Например, чтоб отправить комментарий на сервер, необходимо прописать два заголовка: <code>Content-Type: application/x-www-form-urlencoded</code> и <code>Content-Length: 28</code> (где 28 — это длина передаваемой строки) — и написать комментарий, пропустив одну строку:
+                </p>
+
+                <img src="img/05.png" alt="" class="point-image">
             </div>
         </div>
     </main>
