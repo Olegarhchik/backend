@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/cgi"
+	"regexp"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -15,22 +16,53 @@ type FormUser struct {
 	bio string
 }
 
-func postHandler(w http.ResponseWriter, r *http.Request) {
-	err := r.ParseForm()
+func validationCheck(user FormUser) []string {
+	var pattern string
+	var re *regexp.Regexp
 
-	if err != nil {
-		fmt.Fprintf(w, "Произошла ошибка: %v", err)
-		return
+	var ans []string
+
+	pattern = `^([А-ЯA-Z][а-яa-z]+ ){2}[А-ЯA-Z][а-яa-z]+$`
+	re = regexp.MustCompile(pattern)
+
+	if !re.MatchString(user.fullName) {
+		ans = append(ans, "Поле ФИО некорректно заполнено")
 	}
 
-	user := FormUser{r.FormValue("full_name"),
-					 r.FormValue("phone"),
-					 r.FormValue("email"),
-					 r.FormValue("birthdate"),
-					 r.FormValue("gender"),
-					 r.PostForm["prog_lang[]"],
-					 r.FormValue("bio")}
+	pattern = `^(\+7|8)\d{10}$`
+	re = regexp.MustCompile(pattern)
 
+	if !re.MatchString(user.phone) {
+		ans = append(ans, "Поле Телефон некорректно заполнено")
+	}
+
+	pattern = `^[A-Za-z][\w\.]+@\w+\.[a-z]+$`
+	re = regexp.MustCompile(pattern)
+
+	if !re.MatchString(user.email) {
+		ans = append(ans, "Поле Email некорректно заполнено")
+	}
+
+	if user.birthdate == "" {
+		ans = append(ans, "Заполните поле Дата рождения")
+	}
+	
+	if user.gender == "" {
+		ans = append(ans, "Заполните поле Пол")
+	}
+
+	if len(user.progLang) == 0 {
+		ans = append(ans, "Выберите из списка Любимые языки программирования")
+	}
+
+	if user.bio == "" {
+		ans = append(ans, "Заполните поле Биография")
+	}
+
+	return ans
+}
+
+func addToDataBase(user FormUser, w http.ResponseWriter) {
 	db, err := sql.Open("mysql", "u68861:1067131@/u68861")
 
 	if err != nil {
@@ -97,6 +129,34 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 
 		defer insert.Close()
 	}
+}
+
+func postHandler(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+
+	if err != nil {
+		fmt.Fprintf(w, "Произошла ошибка: %v", err)
+		return
+	}
+
+	user := FormUser{r.FormValue("full_name"),
+					 r.FormValue("phone"),
+					 r.FormValue("email"),
+					 r.FormValue("birthdate"),
+					 r.FormValue("gender"),
+					 r.PostForm["prog_lang[]"],
+					 r.FormValue("bio")}
+	
+	res := validationCheck(user)
+
+	if len(res) != 0 {
+		for _, element := range res {
+			fmt.Fprintf(w, "%s\n", element)
+		}
+		return
+	}
+
+	addToDataBase(user, w)
 
 	fmt.Fprintf(w, "Данные добавлены успешно")
 }
