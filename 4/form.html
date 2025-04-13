@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Задание 3</title>
+    <title>Задание 4</title>
     <link rel="stylesheet" href="../style.css">
 </head>
 <body>
@@ -38,6 +38,7 @@
                         <option value="Clojure">Clojure</option>
                         <option value="Prolog">Prolog</option>
                         <option value="Scala">Scala</option>
+                        <option value="Go">Go</option>
                     </select><br>
 
                     <label for="bio">Биография:</label>
@@ -50,6 +51,24 @@
             </div>
         </div>
     </main>
+
+    {{ if . }}
+    <div class="status-bar">
+    {{ if .FormIsValid }}
+        <div class="notification success">
+            <img src="img/success.png" alt="">
+            <span>Данные отправлены успешно</span>
+        </div>
+    {{ else }}
+        {{ range .Errors.ToArray }}
+        <div class="notification warning">
+            <img src="img/warning.png" alt="">
+            <span>{{ . }}</span>
+        </div>
+        {{ end }}
+    {{ end }}
+    </div>
+    {{ end }}
 
     <script src="script.js"></script>
 </body>

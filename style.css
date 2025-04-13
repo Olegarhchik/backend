@@ -194,12 +194,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     height: 18px;
 }
 
-.notification > span {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
 .warning {
     background-color: #66330080;
 }
