@@ -180,6 +180,15 @@ func addToDataBase(user Form, w http.ResponseWriter) {
 	}
 }
 
+func setCookies(w http.ResponseWriter, response Response) {
+	cookie := &http.Cookie{
+        Name:     "user",
+        Value:    fmt.Sprintf("%v", response),
+    }
+
+	http.SetCookie(w, cookie)
+}
+
 func postHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := template.ParseFiles("form.html")
 
@@ -209,6 +218,7 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 		formErr := checkErrors(user)
 
 		response = Response{user, formErr, !formErr.hasErrors()}
+		setCookies(w, response)
 
 		if response.FormIsValid {
 			addToDataBase(user, w)
