@@ -2,9 +2,11 @@ package main
 
 import (
 	"database/sql"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/http/cgi"
+	"net/url"
 	"regexp"
 	"text/template"
 
@@ -12,13 +14,23 @@ import (
 )
 
 type Form struct {
-	FullName, Phone, Email, Birthdate, Gender string
-	ProgLang []string
-	Bio string
+	FullName string `json:"fullName"`
+	Phone string `json:"phone"`
+	Email string `json:"email"`
+	Birthdate string `json:"birthdate"`
+	Gender string `json:"gender"`
+	ProgLang []string `json:"progLang"`
+	Bio string `json:"bio"`
 }
 
 type Errors struct {
-	FullName, Phone, Email, Birthdate, Gender, ProgLang, Bio string
+	FullName string `json:"fullName"`
+	Phone string `json:"phone"`
+	Email string `json:"email"`
+	Birthdate string `json:"birthdate"`
+	Gender string `json:"gender"`
+	ProgLang string `json:"progLang"`
+	Bio string `json:"bio"`
 }
 
 func (e Errors) ToArray() []string {
@@ -60,9 +72,38 @@ func (e Errors) hasErrors() bool {
 }
 
 type Response struct {
-	Data Form
-	Errors Errors
-	FormIsValid bool
+	Data Form `json:"data"`
+	Errors Errors `json:"errors"`
+	FormIsValid bool `json:"formIsValid"`
+}
+
+func (r Response) IsChecked(lang string) bool {
+	for _, v := range r.Data.ProgLang {
+		if v == lang {
+			return true
+		}
+	}
+	
+	return false
+}
+
+func (r Response) HasError(input string) bool {
+	switch input {
+		case "FullName":
+			return r.Errors.FullName != ""
+		case "Phone":
+			return r.Errors.Phone != ""
+		case "Email":
+			return r.Errors.Email != ""
+		case "Birthdate":
+			return r.Errors.Birthdate != ""
+		case "Gender":
+			return r.Errors.Gender != ""
+		case "ProgLang":
+			return r.Errors.ProgLang != ""
+		default:
+			return r.Errors.Bio != ""
+	}
 }
 
 func checkErrors(user Form) Errors {
@@ -180,6 +221,48 @@ func addToDataBase(user Form, w http.ResponseWriter) {
 	}
 }
 
+func setCookies(w http.ResponseWriter, response Response) (*http.Cookie, error) {
+	responseJSON, err := json.Marshal(response)
+	responseEncoded := url.QueryEscape(string(responseJSON))
+
+	if err != nil {
+		return nil, err
+	}
+
+	cookie := &http.Cookie{
+        Name:     "user",
+        Value:    responseEncoded,
+    }
+
+	http.SetCookie(w, cookie)
+
+	return cookie, nil
+}
+
+func getResponse(r *http.Request) (Response, error) {
+	cookie, err := r.Cookie("user")
+
+	if err != nil {
+		return Response{}, nil
+	}
+
+	var response Response
+
+	responseDecoded, err := url.QueryUnescape(cookie.Value)
+
+	if err != nil {
+		return Response{}, err
+	}
+
+	err = json.Unmarshal([]byte(responseDecoded), &response)
+
+	if err != nil {
+		return Response{}, err
+	}
+
+	return response, nil
+}
+
 func postHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := template.ParseFiles("form.html")
 
@@ -188,7 +271,12 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var response Response
+	response, err := getResponse(r)
+
+	if err != nil {
+		fmt.Fprintf(w, "Ошибка декодирования JSON: %v", err)
+		return
+	}
 
 	if r.Method == http.MethodPost {
 		err := r.ParseForm()
@@ -209,9 +297,18 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 		formErr := checkErrors(user)
 
 		response = Response{user, formErr, !formErr.hasErrors()}
+		cookie, err := setCookies(w, response)
+
+		if err != nil {
+			fmt.Fprintf(w, "Ошибка кодирования JSON: %v", err)
+			return
+		}
 
 		if response.FormIsValid {
 			addToDataBase(user, w)
+
+			cookie.MaxAge = 3600 * 24 * 365
+			http.SetCookie(w, cookie)
 		}
 	}
 

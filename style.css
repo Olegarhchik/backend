@@ -217,3 +217,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     top: 50px;
     opacity: 0;
 }
+
+.error__input {
+    border-color: #f44;
+    box-shadow: 0 0 5px #f44;
+}

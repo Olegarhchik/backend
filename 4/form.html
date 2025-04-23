@@ -12,37 +12,37 @@
             <div class="form">
                 <h2>Заполните форму</h2>
                 <form action="main.cgi" method="post">
-                    <input type="text" id="full_name" name="full_name" placeholder="ФИО" class="form-input"><br>
+                    <input type="text" id="full_name" name="full_name" placeholder="ФИО" class="form-input {{ if .HasError `FullName` }} error__input {{ end }}" value="{{ .Data.FullName }}"><br>
 
-                    <input type="tel" id="phone" name="phone" placeholder="Телефон" class="form-input"><br>
+                    <input type="tel" id="phone" name="phone" placeholder="Телефон" class="form-input {{ if .HasError `Phone` }} error__input {{ end }}" value="{{ .Data.Phone }}"><br>
 
-                    <input type="email" id="email" name="email" placeholder="Email" class="form-input"><br>
+                    <input type="email" id="email" name="email" placeholder="Email" class="form-input {{ if .HasError `Email` }} error__input {{ end }}" value="{{ .Data.Email }}"><br>
 
                     <label for="birthdate">Дата рождения:</label>
-                    <input type="date" id="birthdate" name="birthdate" class="form-input"><br>
+                    <input type="date" id="birthdate" name="birthdate" class="form-input {{ if .HasError `Birthdate` }} error__input {{ end }}" value="{{ .Data.Birthdate }}"><br>
 
                     <label>Пол:</label>
-                    <label><input type="radio" name="gender" value="male">М</label>
-                    <label><input type="radio" name="gender" value="female">Ж</label><br>
+                    <label><input type="radio" name="gender" value="male" {{ if eq .Data.Gender "male" }} checked {{ end }}>М</label>
+                    <label><input type="radio" name="gender" value="female" {{ if eq .Data.Gender "female" }} checked {{ end }}>Ж</label><br>
 
                     <label for="prog_lang">Любимый язык программирования:</label>
-                    <select multiple id="prog_lang" name="prog_lang[]" class="form-input">
-                        <option value="JavaScript">JavaScript</option>
-                        <option value="PHP">PHP</option>
-                        <option value="Python">Python</option>
-                        <option value="Java">Java</option>
-                        <option value="Pascal">Pascal</option>
-                        <option value="C">С</option>
-                        <option value="C++">С++</option>
-                        <option value="Haskel">Haskel</option>
-                        <option value="Clojure">Clojure</option>
-                        <option value="Prolog">Prolog</option>
-                        <option value="Scala">Scala</option>
-                        <option value="Go">Go</option>
+                    <select multiple id="prog_lang" name="prog_lang[]" class="form-input {{ if .HasError `ProgLang` }} error__input {{ end }}">
+                        <option value="JavaScript" {{ if .IsChecked "JavaScript"}} selected {{ end }}>JavaScript</option>
+                        <option value="PHP" {{ if .IsChecked "PHP" }} selected {{ end }}>PHP</option>
+                        <option value="Python" {{ if .IsChecked "Python" }} selected {{ end }}>Python</option>
+                        <option value="Java" {{ if .IsChecked "Java" }} selected {{ end }}>Java</option>
+                        <option value="Pascal" {{ if .IsChecked "Pascal" }} selected {{ end }}>Pascal</option>
+                        <option value="C" {{ if .IsChecked "C" }} selected {{ end }}>С</option>
+                        <option value="C++" {{ if .IsChecked "C++" }} selected {{ end }}>С++</option>
+                        <option value="Haskel" {{ if .IsChecked "Haskel" }} selected {{ end }}>Haskel</option>
+                        <option value="Clojure" {{ if .IsChecked "Clojure" }} selected {{ end }}>Clojure</option>
+                        <option value="Prolog" {{ if .IsChecked "Prolog" }} selected {{ end }}>Prolog</option>
+                        <option value="Scala" {{ if .IsChecked "Scala" }} selected {{ end }}>Scala</option>
+                        <option value="Go" {{ if .IsChecked "Go" }} selected {{ end }}>Go</option>
                     </select><br>
 
                     <label for="bio">Биография:</label>
-                    <textarea id="bio" name="bio" placeholder="Введите свою биографию..." class="form-input"></textarea><br>
+                    <textarea id="bio" name="bio" placeholder="Введите свою биографию..." class="form-input {{ if .HasError `Bio` }} error__input {{ end }}">{{ .Data.Bio }}</textarea><br>
 
                     <label><input type="checkbox" name="agree" required>С контрактом ознакомлен(-а)</label><br>
 
