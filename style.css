@@ -194,12 +194,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     height: 18px;
 }
 
-.notification > span {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
 .warning {
     background-color: #66330080;
 }
@@ -222,4 +216,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     position: relative;
     top: 50px;
     opacity: 0;
+}
+
+.error__input {
+    border-color: #f44;
+    box-shadow: 0 0 5px #f44;
 }
