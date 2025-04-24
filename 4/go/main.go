@@ -77,6 +77,35 @@ type Response struct {
 	FormIsValid bool `json:"formIsValid"`
 }
 
+func (r Response) IsChecked(lang string) bool {
+	for _, v := range r.Data.ProgLang {
+		if v == lang {
+			return true
+		}
+	}
+	
+	return false
+}
+
+func (r Response) HasError(input string) bool {
+	switch input {
+		case "FullName":
+			return r.Errors.FullName != ""
+		case "Phone":
+			return r.Errors.Phone != ""
+		case "Email":
+			return r.Errors.Email != ""
+		case "Birthdate":
+			return r.Errors.Birthdate != ""
+		case "Gender":
+			return r.Errors.Gender != ""
+		case "ProgLang":
+			return r.Errors.ProgLang != ""
+		default:
+			return r.Errors.Bio != ""
+	}
+}
+
 func checkErrors(user Form) Errors {
 	var pattern string
 	var re *regexp.Regexp
