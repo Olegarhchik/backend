@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
 body {
+    margin: 0;
     background-color: #1d1d1d;
 }
 
@@ -27,7 +28,6 @@ h1, h2 {
 
 .container {
     max-width: 1000px;
-    margin: 0 auto;
 }
 
 .point {
@@ -221,4 +221,34 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .error__input {
     border-color: #f44;
     box-shadow: 0 0 5px #f44;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    min-height: 100vh;
+    padding: 10px 0;
+    box-sizing: border-box;
+}
+
+.switch-form {
+    padding: 5px 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-size: 14px;
+}
+
+.switch-form p {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.error-text {
+    margin: -4px 0 8px 8px;
+    font-size: 14px;
+    color: red;
 }
