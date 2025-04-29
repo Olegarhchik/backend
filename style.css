@@ -100,11 +100,14 @@ select.form-input {
 }
 
 .form-submit {
-    width: 100%;
     padding: 10px;
-    background-color: #007bff;
     border: none;
     border-radius: 5px;
+    margin-top: 8px;
+    
+    width: 100%;
+    background-color: #007bff;
+
     color: #fff;
     font-size: 16px;
     cursor: pointer;
@@ -117,10 +120,6 @@ select.form-input {
 
 input[type="radio"] {
     margin-bottom: 8px;
-}
-
-input[type="checkbox"] {
-    margin-bottom: 16px;
 }
 
 select[name="prog-lang"] {

@@ -17,6 +17,7 @@ type (
 	Response struct {
 		User User
 		Error string
+		Type string
 	}
 
 	User struct {
@@ -210,6 +211,7 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 
 		// добавление пользователя в базу данных
 		err = response.User.addToDB()
+		response.Type = "postRegister"
 
 		if err != nil {
 			fmt.Fprintf(w, "Ошибка при добавлении пользователя в базу данных: %v", err)

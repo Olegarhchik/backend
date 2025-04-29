@@ -12,7 +12,7 @@
             <div id="register" class="form">
                 <h2>Зарегистрируйтесь</h2>
 
-                <form action="main.cgi" method="post">
+                <form action="main.cgi?action=register" method="post">
                     <input type="text" class="form-input" id="email" name="email" placeholder="Email">
 
                     {{ if .Error }}
@@ -25,7 +25,7 @@
 
                     <div class="switch-form">
                         <p>Уже есть аккаунт?</p>
-                        <a href="login.html">войти</a>
+                        <a href="main.cgi">войти</a>
                     </div>
                 </form>
             </div>

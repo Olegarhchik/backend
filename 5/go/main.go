@@ -6,5 +6,14 @@ import (
 )
 
 func main() {
-	cgi.Serve(http.HandlerFunc(registerHandler))
+	cgi.Serve(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		action := r.URL.Query().Get("action")
+
+		switch action {
+			case "register":
+				registerHandler(w, r)
+			default:
+				loginHandler(w, r)
+		}
+	}))
 }
