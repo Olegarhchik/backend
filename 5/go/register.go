@@ -20,9 +20,9 @@ type (
 	}
 
 	User struct {
-		login string
-		password string
-		email string
+		Login string
+		Password string
+		Email string
 	}
 )
 
@@ -35,7 +35,7 @@ func (user User) addToDB() error {
 
 	defer db.Close()
 
-	ins, err := db.Query(fmt.Sprintf("INSERT INTO User(Password, Email) VALUES ('%x', '%s')", sha256.Sum256([]byte(user.password)), user.email))
+	ins, err := db.Query(fmt.Sprintf("INSERT INTO User(Password, Email) VALUES ('%x', '%s')", sha256.Sum256([]byte(user.Password)), user.Email))
 
 	if err != nil {
 		return err
@@ -77,7 +77,7 @@ func findUserByEmail(email string) (User, error) {
 	defer sel.Close()
 
 	for sel.Next() {
-		err := sel.Scan(&user.login, &user.password, &user.email)
+		err := sel.Scan(&user.Login, &user.Password, &user.Email)
 
 		if err != nil {
 			return user, err

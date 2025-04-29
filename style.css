@@ -179,19 +179,37 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 15px;
 
     margin-bottom: 10px;
     padding: 5px 15px;
+    max-width: 320px;
+    width: 300px;
     border: 1px solid #2d2d2d;
     border-radius: 5px;
-
-    max-width: 320px;
 }
 
 .notification > img {
     width: 18px;
     height: 18px;
+}
+
+img.copy {
+    cursor: pointer;
+    padding: 2px;
+    box-sizing: border-box;
+}
+
+img.copy:hover {
+    background: #4f4f4f;
+    border-radius: 50%;
+    transition: all 0.1s linear;
+}
+
+.span-group {
+    display: flex;
+    flex-grow: 1;
+    justify-content: space-between;
 }
 
 .warning {

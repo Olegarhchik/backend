@@ -7,6 +7,37 @@
     <link rel="stylesheet" href="../style.css">
 </head>
 <body>
-{{ .User }}
+    {{ if . }}
+    <div class="status-bar">
+        <div class="notification success">
+            <img src="img/success.png" alt="">
+            <span>Вы успешно зарегистрированы. Для дальнейшей работы сохраните ваши данные для входа!!!</span>
+        </div>
+
+        <div class="notification warning">
+            <img src="img/warning.png" alt="">
+
+            <div class="span-group">
+                <span>Логин:</span>
+                <span>{{ .User.Login }}</span>
+            </div>
+
+            <img class="copy" src="img/copy.png" alt="">
+        </div>
+
+        <div class="notification warning">
+            <img src="img/warning.png" alt="">
+
+            <div class="span-group">
+                <span>Пароль:</span>
+                <span>{{ .User.Password }}</span>
+            </div>
+
+            <img class="copy" src="img/copy.png" alt="">
+        </div>
+    </div>
+    {{ end }}
+
+    <script src="script.js"></script>
 </body>
 </html>
