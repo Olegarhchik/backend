@@ -194,6 +194,30 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     height: 18px;
 }
 
+.notification-close {
+    display: block;
+    padding: 2px;
+    box-sizing: border-box;
+    
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+
+    opacity: 0;
+    background: #f00;
+
+    cursor: pointer;
+    transition: all 0.1s linear;
+}
+
+.notification:hover .notification-close {
+    opacity: 0.5;
+}
+
 img.copy {
     cursor: pointer;
     padding: 2px;

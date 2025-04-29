@@ -5,6 +5,12 @@ notifications.forEach((elem, index) => {
     setTimeout(() => {
         elem.classList.add('show');
     }, 250 * (index + 1));
+
+    const copyButton = elem.querySelector('.notification-close');
+
+    copyButton.addEventListener('click', () => {
+        elem.remove();
+    });
 });
 
 const copyButtons = Array.from(document.querySelectorAll('img.copy'));
@@ -33,5 +39,5 @@ copyButtons.forEach(button => {
         setTimeout(() => {
             button.setAttribute('src', 'img/copy.png');
         }, 5000);
-    })
-})
+    });
+});
