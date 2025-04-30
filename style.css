@@ -89,14 +89,19 @@ label {
 }
 
 textarea.form-input {
-    min-height: 80px;
-    height: 100px;
-    max-height: 120px;
+    min-height: 120px;
+    max-height: 240px;
     resize: vertical;
 }
 
-select.form-input {
-    height: 100px;
+input#password.form-input {
+    font-weight: 700;
+    letter-spacing: 4px;
+}
+
+input#password.form-input::placeholder {
+    font-weight: 400;
+    letter-spacing: normal;
 }
 
 .form-submit {
@@ -119,12 +124,25 @@ select.form-input {
 }
 
 input[type="radio"] {
+    cursor: pointer;
     margin-bottom: 8px;
 }
 
-select[name="prog-lang"] {
-    height: auto;
-    padding: 10px;
+input[type="radio"]:checked {
+    cursor: initial;
+}
+
+select.form-input {
+    padding: 0px;
+    overflow-y: hidden;
+}
+
+option {
+    padding: 4px 8px;
+}
+
+option:checked {
+    background: #007bff;
 }
 
 .form label {
@@ -133,24 +151,6 @@ select[name="prog-lang"] {
 
 input[type="date"]::-webkit-calendar-picker-indicator {
     filter: invert(1);
-}
-
-::-webkit-scrollbar {
-    width: 12px;
-}
-
-::-webkit-scrollbar-track {
-    background: #2d2d2d; border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #555;
-    border-radius: 10px;
-    border: 3px solid #2d2d2d;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #777;
 }
 
 /* Status Bar */
@@ -207,14 +207,14 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     border-radius: 50%;
 
     opacity: 0;
-    background: #f00;
+    background: rgba(255, 0, 0, 0.5);
 
     cursor: pointer;
     transition: all 0.1s linear;
 }
 
 .notification:hover .notification-close {
-    opacity: 0.5;
+    opacity: 1;
 }
 
 img.copy {
@@ -264,6 +264,8 @@ img.copy:hover {
     box-shadow: 0 0 5px #f44;
 }
 
+/* Other */
+
 main {
     display: flex;
     justify-content: center;
@@ -292,4 +294,51 @@ main {
     margin: -4px 0 8px 8px;
     font-size: 14px;
     color: red;
+}
+
+.disabled {
+    position: relative;
+}
+
+.disabled:hover > .edit {
+    opacity: 1;
+    transition: all 0.1s linear;
+}
+
+.edit:hover {
+    border-radius: 50%;
+    background: #4f4f4f;
+}
+
+img.edit {
+    box-sizing: border-box;
+    padding: 2px;
+    height: 19px;
+    width: 19px;
+
+    position: absolute;
+    top: calc(50% - 10px);
+    right: 10px;
+    cursor: pointer;
+    
+    opacity: 0;
+    transition: all 0.1s linear;
+}
+
+input:disabled, select:disabled, textarea:disabled {
+    cursor: not-allowed;
+}
+
+textarea.form-input ~ img.edit, select.form-input ~ img.edit {
+    top: 18px;
+}
+
+.disabled:has([type="radio"]) > img.edit {
+    position: relative;
+    top: 3px;
+    left: 5px;
+}
+
+.wide {
+    width: 400px;
 }

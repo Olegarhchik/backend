@@ -14,7 +14,11 @@ import (
 )
 
 type (
-	Response struct {
+	RegisterResp struct {
+		Error string
+	}
+
+	LoginResp struct {
 		User User
 		Error string
 		Type string
@@ -179,7 +183,7 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	response := Response{}
+	response := RegisterResp{}
 
 	if r.Method == http.MethodPost {
 		email := r.FormValue("email")
@@ -200,6 +204,8 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 			tmpl.Execute(w, response)
 			return
 		}
+
+		response := LoginResp{}
 
 		// создание пользователя
 		response.User, err = createUser(email)
@@ -224,6 +230,9 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprintf(w, "Ошибка при работе с шаблоном: %v", err)
 			return
 		}
+
+		tmpl.Execute(w, response)
+		return
 	}
 
 	tmpl.Execute(w, response)

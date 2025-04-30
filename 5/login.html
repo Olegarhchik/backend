@@ -17,6 +17,10 @@
 
                     <input type="password" class="form-input" placeholder="Пароль" id="password" name="password">
 
+                    {{ if eq .Type "onLogin" }}
+                    <p class="error-text">{{ .Error }}</p>
+                    {{ end }}
+
                     <input type="submit" class="form-submit" value="Войти">
 
                     <div class="switch-form">

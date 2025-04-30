@@ -41,3 +41,26 @@ copyButtons.forEach(button => {
         }, 5000);
     });
 });
+
+const editButtons = Array.from(document.querySelectorAll('img.edit'));
+
+editButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        const inputs = button.parentElement.querySelectorAll(':disabled');
+        
+        inputs.forEach(input => {
+            input.removeAttribute('disabled');
+            button.remove();
+
+            if (input.getAttribute('type') == 'radio')
+                return;
+
+            input.focus();
+                
+            if (input.getAttribute('type') == 'date')
+                return;
+            
+            input.selectionEnd = input.value.length;
+        });
+    });
+});
