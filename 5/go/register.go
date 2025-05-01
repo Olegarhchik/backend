@@ -31,7 +31,7 @@ type (
 	}
 )
 
-func (user User) addToDB() error {
+func insValues(table string, cols string, values ...string) error {
 	db, err := sql.Open("mysql", "u68861:1067131@/u68861")
 
 	if err != nil {
@@ -40,13 +40,18 @@ func (user User) addToDB() error {
 
 	defer db.Close()
 
-	ins, err := db.Query(fmt.Sprintf("INSERT INTO User(Password, Email) VALUES ('%x', '%s')", sha256.Sum256([]byte(user.Password)), user.Email))
+	for i, value := range values {
+		values[i] = "'" + value + "'"
+	}
+
+	_, err = db.Exec(fmt.Sprintf(`
+		INSERT INTO %s(%s)
+		VALUES (%s)
+	`, table, cols, strings.Join(values, ", ")))
 
 	if err != nil {
 		return err
 	}
-
-	defer ins.Close()
 
 	return nil
 }
@@ -216,7 +221,7 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// добавление пользователя в базу данных
-		err = response.User.addToDB()
+		err = insValues("User", "Password, Email", fmt.Sprintf("%x", sha256.Sum256([]byte(response.User.Password))), response.User.Email)
 		response.Type = "postRegister"
 
 		if err != nil {

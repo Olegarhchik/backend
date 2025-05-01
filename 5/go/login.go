@@ -13,6 +13,7 @@ type (
 	InfoResp struct {
 		Info Info
 		Errors Errors
+		Saved bool
 	}
 
 	Errors struct {
@@ -101,8 +102,7 @@ func checkData(user User) (string, error) {
 	}
 }
 
-func getUser(login string) (Info, error) {
-	id := extractID(login)
+func getUser(id string) (Info, error) {
 	info := Info{}
 
 	db, err := sql.Open("mysql", "u68861:1067131@/u68861")
@@ -198,14 +198,14 @@ func getEmail(login string) (string, error) {
 }
 
 func updateUser(response *InfoResp, login string) error {
-	info, err := getUser(login)
+	info, err := getUser(extractID(login))
 	errors := Errors{}
 
 	if err != nil {
 		return err
 	}
 
-	if info.Email == "" {
+	if info.FullName == "" {
 		info.Email, err = getEmail(login)
 		errors = Errors{
 			FullName: "Заполните поле",

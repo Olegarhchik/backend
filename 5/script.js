@@ -46,10 +46,11 @@ const editButtons = Array.from(document.querySelectorAll('img.edit'));
 
 editButtons.forEach(button => {
     button.addEventListener('click', () => {
-        const inputs = button.parentElement.querySelectorAll(':disabled');
+        const div = button.parentElement;
+        const inputs = div.querySelectorAll('input, select, textarea');
         
         inputs.forEach(input => {
-            input.removeAttribute('disabled');
+            div.classList.remove("disabled");
             button.remove();
 
             if (input.getAttribute('type') == 'radio')

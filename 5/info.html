@@ -11,10 +11,10 @@
         <div class="container">
             <div class="form">
                 <h2>Данные пользователя</h2>
-                <form action="main.cgi" method="post" class="wide">
+                <form action="main.cgi?action=info" method="post" class="wide">
                     <label for="full_name">ФИО:</label>
                     <div {{ if eq .Errors.FullName "" }} class="disabled" {{ end }}>
-                        <input type="text" id="full_name" name="full_name" placeholder="Иванов Иван Иванович" class="form-input" value="{{ .Info.FullName }}" {{ if eq .Errors.FullName "" }} disabled {{ end }}>
+                        <input type="text" id="full_name" name="full_name" placeholder="Иванов Иван Иванович" class="form-input" value="{{ .Info.FullName }}">
 
                         {{ if eq .Errors.FullName "" }}
                         <img src="img/edit.png" class="edit">
@@ -27,7 +27,7 @@
 
                     <label for="phone">Телефон:</label>
                     <div {{ if eq .Errors.Phone "" }} class="disabled" {{ end }}>
-                        <input type="tel" id="phone" name="phone" placeholder="+79123456789" class="form-input" value="{{ .Info.Phone }}" {{ if eq .Errors.Phone "" }} disabled {{ end }}>
+                        <input type="tel" id="phone" name="phone" placeholder="+79123456789" class="form-input" value="{{ .Info.Phone }}">
 
                         {{ if eq .Errors.Phone "" }}
                         <img src="img/edit.png" class="edit">
@@ -39,21 +39,13 @@
                     </div>
 
                     <label for="email">Email:</label>
-                    <div {{ if eq .Errors.Email "" }} class="disabled" {{ end }}>
-                        <input type="text" id="email" name="email" placeholder="email@example.com" class="form-input" value="{{ .Info.Email }}" {{ if eq .Errors.Email "" }} disabled {{ end }}>
-
-                        {{ if eq .Errors.Email "" }}
-                        <img src="img/edit.png" class="edit">
-                        {{ else }}
-                        <p class="error-text">
-                            {{ .Errors.Email }}
-                        </p>
-                        {{ end }}
+                    <div class="disabled" title="Смена email невозможна">
+                        <input type="text" id="email" name="email" placeholder="email@example.com" class="form-input" value="{{ .Info.Email }}" readonly>
                     </div>
 
                     <label for="birthdate">Дата рождения:</label>
                     <div {{ if eq .Errors.Birthdate "" }} class="disabled" {{ end }}>
-                        <input type="date" id="birthdate" name="birthdate" class="form-input" value="{{ .Info.Birthdate }}" {{ if eq .Errors.Birthdate "" }} disabled {{ end }}>
+                        <input type="date" id="birthdate" name="birthdate" class="form-input" value="{{ .Info.Birthdate }}">
 
                         {{ if eq .Errors.Birthdate "" }}
                         <img src="img/edit.png" class="edit">
@@ -67,9 +59,9 @@
                     <div {{ if eq .Errors.Gender "" }} class="disabled" {{ end }}>
                         <label>Пол:</label>
 
-                        <label><input type="radio" name="gender" value="male" {{ if eq .Info.Gender "male" }} checked {{ else }} {{ if eq .Errors.Gender "" }} disabled {{ end }} {{ end }}>М</label>
+                        <label><input type="radio" name="gender" value="male" {{ if eq .Info.Gender "male" }} checked {{ end }}>М</label>
 
-                        <label><input type="radio" name="gender" value="female" {{ if eq .Info.Gender "female" }} checked {{ else }} {{ if eq .Errors.Gender "" }} disabled {{ end }} {{ end }}>Ж</label>
+                        <label><input type="radio" name="gender" value="female" {{ if eq .Info.Gender "female" }} checked {{ end }}>Ж</label>
 
                         {{ if eq .Errors.Gender "" }}
                         <img src="img/edit.png" class="edit">
@@ -83,7 +75,7 @@
 
                     <label for="prog_lang">Любимый язык программирования:</label>
                     <div {{ if eq .Errors.ProgLang "" }} class="disabled" {{ end }}>
-                        <select multiple id="prog_lang" name="prog_lang[]" class="form-input" size="12" {{ if eq .Errors.ProgLang "" }} disabled {{ end }}>
+                        <select multiple id="prog_lang" name="prog_lang[]" class="form-input" size="12">
                             <option value="JavaScript" {{ if .IsChecked "JavaScript"}} selected {{ end }}>JavaScript</option>
                             <option value="PHP" {{ if .IsChecked "PHP" }} selected {{ end }}>PHP</option>
                             <option value="Python" {{ if .IsChecked "Python" }} selected {{ end }}>Python</option>
@@ -109,7 +101,7 @@
 
                     <label for="bio">Биография:</label>
                     <div {{ if eq .Errors.Bio "" }} class="disabled" {{ end }}>
-                        <textarea id="bio" name="bio" placeholder="Введите свою биографию..." class="form-input" {{ if eq .Errors.Bio "" }} disabled {{ end }}>{{ .Info.Bio }}</textarea>
+                        <textarea id="bio" name="bio" placeholder="Введите свою биографию..." class="form-input">{{ .Info.Bio }}</textarea>
 
                         {{ if eq .Errors.Bio "" }}
                         <img src="img/edit.png" class="edit">
@@ -120,11 +112,27 @@
                         {{ end }}
                     </div>
 
-                    <input type="submit" value="Сохранить данные" class="form-submit">
+                    <div class="button-group">
+                        <input type="submit" value="Сохранить данные" class="form-submit">
+
+                        <a class="exit" href="main.cgi"><img src="img/exit.png"></a>
+                    </div>
                 </form>
             </div>
         </div>
     </main>
+
+    {{ if .Saved }}
+    <div class="status-bar">
+        <div class="notification success">
+            <img src="img/success.png" alt="">
+
+            <span>Ваши данные сохранены изменены</span>
+
+            <img class="notification-close" src="img/close.png">
+        </div>
+    </div>
+    {{ end }}
 
     <script src="script.js"></script>
 </body>

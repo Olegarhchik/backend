@@ -36,8 +36,10 @@
     <div class="status-bar">
         <div class="notification success">
             <img src="img/success.png" alt="">
-            <span>Вы успешно зарегистрированы. Для дальнейшей работы сохраните ваши данные для входа!!!</span>
-            <img class="notification-close" src="img/close.png"></img>
+
+            <span>Вы успешно зарегистрированы. <br> Для дальнейшей работы сохраните ваши данные для входа!!!</span>
+
+            <img class="notification-close" src="img/close.png">
         </div>
 
         <div class="notification warning">
@@ -49,7 +51,7 @@
             </div>
 
             <img class="copy" src="img/copy.png" alt="">
-            <img class="notification-close" src="img/close.png"></img>
+            <img class="notification-close" src="img/close.png">
         </div>
 
         <div class="notification warning">
@@ -61,7 +63,19 @@
             </div>
 
             <img class="copy" src="img/copy.png" alt="">
-            <img class="notification-close" src="img/close.png"></img>
+            <img class="notification-close" src="img/close.png">
+        </div>
+    </div>
+    {{ end }}
+
+    {{ if eq .Type "Unauthorized" }}
+    <div class="status-bar">
+        <div class="notification error">
+            <img src="img/error.png" alt="">
+
+            <span>Обнаружен неавторизованный пользователь! Пожалуйста, войдите в систему</span>
+
+            <img class="notification-close" src="img/close.png">
         </div>
     </div>
     {{ end }}

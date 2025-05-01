@@ -12,6 +12,8 @@ func main() {
 		switch action {
 			case "register":
 				registerHandler(w, r)
+			case "info":
+				saveInfoHandler(w, r)
 			default:
 				loginHandler(w, r)
 		}

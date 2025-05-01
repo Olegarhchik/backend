@@ -105,11 +105,12 @@ input#password.form-input::placeholder {
 }
 
 .form-submit {
+    margin-top: 8px;
     padding: 10px;
     border: none;
     border-radius: 5px;
-    margin-top: 8px;
     
+    flex-grow: 1;
     width: 100%;
     background-color: #007bff;
 
@@ -157,8 +158,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .status-bar {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 15px;
+    right: calc(50% - 200px);
     font-size: 14px;
     
     display: flex;
@@ -180,34 +181,32 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     align-items: center;
     gap: 15px;
 
+    box-sizing: border-box;
     margin-bottom: 10px;
-    padding: 5px 15px;
-    max-width: 320px;
-    width: 300px;
-    border: 1px solid #2d2d2d;
-    border-radius: 5px;
+    padding: 10px 15px;
+    width: 400px;
+    border-radius: 10px;
 }
 
 .notification > img {
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
 }
 
 .notification-close {
     display: block;
-    padding: 2px;
     box-sizing: border-box;
     
     position: absolute;
     top: -5px;
     right: -5px;
     
-    width: 14px;
-    height: 14px;
+    padding: 2px;
+    border: 1px solid #2d2d2d;
     border-radius: 50%;
 
     opacity: 0;
-    background: rgba(255, 0, 0, 0.5);
+    background: rgba(255, 0, 0, 0.8);
 
     cursor: pointer;
     transition: all 0.1s linear;
@@ -236,15 +235,30 @@ img.copy:hover {
 }
 
 .warning {
-    background-color: #66330080;
+    background-color: #530e;
+}
+
+.warning span {
+    font-weight: 500;
+    color: #fb0;
 }
 
 .error {
-    background-color: #66000080;
+    background-color: #600e;
+}
+
+.error > span {
+    color: #e00;
+    font-weight: 500;
 }
 
 .success {
-    background-color: #00442280;
+    background-color: #042e;
+}
+
+.success span {
+    font-weight: 500;
+    color: #4c0;
 }
 
 .show {
@@ -297,12 +311,21 @@ main {
 }
 
 .disabled {
+    cursor: not-allowed;
     position: relative;
 }
 
 .disabled:hover > .edit {
     opacity: 1;
     transition: all 0.1s linear;
+}
+
+.disabled input, .disabled select, .disabled textarea, .disabled > label {
+    pointer-events: none;
+}
+
+.disabled input[type="date"]::-webkit-calendar-picker-indicator {
+    display: none;
 }
 
 .edit:hover {
@@ -325,10 +348,6 @@ img.edit {
     transition: all 0.1s linear;
 }
 
-input:disabled, select:disabled, textarea:disabled {
-    cursor: not-allowed;
-}
-
 textarea.form-input ~ img.edit, select.form-input ~ img.edit {
     top: 18px;
 }
@@ -341,4 +360,31 @@ textarea.form-input ~ img.edit, select.form-input ~ img.edit {
 
 .wide {
     width: 400px;
+}
+
+.button-group {
+    display: flex;
+    gap: 8px;
+}
+
+.exit {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    margin-top: 8px;
+    padding: 10px;
+
+    box-sizing: border-box;
+    background-color: #007bff;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+a.exit:hover {
+    background-color: #0056b3;
+}
+
+.exit > img {
+    width: 20px;
+    height: 20px;
 }
