@@ -7,6 +7,9 @@ import (
 	"html/template"
 	"net/http"
 	"regexp"
+	"time"
+
+	jwt "github.com/golang-jwt/jwt/v5"
 )
 
 type (
@@ -34,6 +37,11 @@ type (
 		Gender string
 		ProgLang []string
 		Bio string
+	}
+
+	Payload struct {
+		Email string
+		jwt.RegisteredClaims
 	}
 )
 
@@ -228,7 +236,46 @@ func updateUser(response *InfoResp, login string) error {
 	return nil
 }
 
+func grantAccessToken(w http.ResponseWriter, email string) {
+	payload := Payload{
+		Email: email,
+		RegisteredClaims: jwt.RegisteredClaims{
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour)),
+		},
+	}
+	key := []byte("access-token-secret-key")
+
+	accessToken := jwt.NewWithClaims(jwt.SigningMethodHS256, payload)
+
+	t, err := accessToken.SignedString(key)
+
+	if err != nil {
+		fmt.Fprintf(w, "Ошибка при создании токена: %v", err)
+		return
+	}
+
+	cookie := &http.Cookie{
+		Name: "accessToken",
+		Value: t,
+	}
+
+	http.SetCookie(w, cookie)
+}
+
+func deleteCookie(w http.ResponseWriter, r *http.Request) {
+	cookie, err := r.Cookie("accessToken")
+
+	if err != nil {
+		return
+	}
+
+	cookie.MaxAge = -1
+	http.SetCookie(w, cookie)
+}
+
 func loginHandler(w http.ResponseWriter, r *http.Request) {
+	deleteCookie(w, r)
+
 	tmpl, err := template.ParseFiles("login.html")
 
 	if err != nil {
@@ -275,6 +322,8 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprintf(w, "Ошибка при работе с базой данных: %v", err)
 			return
 		}
+
+		grantAccessToken(w, response.Info.Email)
 
 		tmpl.Execute(w, response)
 		return

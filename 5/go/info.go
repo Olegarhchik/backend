@@ -6,6 +6,8 @@ import (
 	"html/template"
 	"net/http"
 	"regexp"
+
+	"github.com/golang-jwt/jwt/v5"
 )
 
 func checkInfo(info Info) Errors {
@@ -63,8 +65,24 @@ func (response InfoResp) IsValid() bool {
 	return errors.FullName == "" && errors.Phone == "" && errors.Email == "" && errors.Birthdate == "" && errors.Gender == "" && errors.ProgLang == "" && errors.Bio == ""
 }
 
-func isAuthorized() bool {
-	return true
+func isAuthorized(r *http.Request, email string) bool {
+	cookie, err := r.Cookie("accessToken")
+
+	if err != nil {
+		return false
+	}
+
+	token, err := jwt.ParseWithClaims(cookie.Value, &Payload{}, func(token *jwt.Token) (interface{}, error) {
+		return []byte("access-token-secret-key"), nil
+	})
+
+	if err != nil || !token.Valid {
+		return false
+	}
+
+	payload, _ := token.Claims.(*Payload)
+
+	return payload.Email == email
 }
 
 func getIdByEmail(email string) (string, error) {
@@ -345,7 +363,7 @@ func saveInfoHandler(w http.ResponseWriter, r *http.Request) {
 		errors := checkInfo(info)
 		response = InfoResp{Info{}, errors, false}
 
-		if !isAuthorized() {
+		if !isAuthorized(r, info.Email) {
 			tmpl, err := template.ParseFiles("login.html")
 
 			if err != nil {
@@ -367,8 +385,9 @@ func saveInfoHandler(w http.ResponseWriter, r *http.Request) {
 			tmpl.Execute(w, response)
 			return
 		}
-
+		
 		applyChanges(info, id)
+		response.Info = info
 		response.Saved = true
 	}
 
