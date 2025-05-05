@@ -361,7 +361,7 @@ func saveInfoHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		errors := checkInfo(info)
-		response = InfoResp{Info{}, errors, false}
+		response = InfoResp{info, errors, false}
 
 		if !isAuthorized(r, info.Email) {
 			tmpl, err := template.ParseFiles("login.html")
@@ -387,7 +387,6 @@ func saveInfoHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		
 		applyChanges(info, id)
-		response.Info = info
 		response.Saved = true
 	}
 
