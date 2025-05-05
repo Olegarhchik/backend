@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
 body {
+    margin: 0;
     background-color: #1d1d1d;
 }
 
@@ -27,7 +28,6 @@ h1, h2 {
 
 .container {
     max-width: 1000px;
-    margin: 0 auto;
 }
 
 .point {
@@ -89,22 +89,31 @@ label {
 }
 
 textarea.form-input {
-    min-height: 80px;
-    height: 100px;
-    max-height: 120px;
+    min-height: 120px;
+    max-height: 240px;
     resize: vertical;
 }
 
-select.form-input {
-    height: 100px;
+input#password.form-input {
+    font-weight: 700;
+    letter-spacing: 4px;
+}
+
+input#password.form-input::placeholder {
+    font-weight: 400;
+    letter-spacing: normal;
 }
 
 .form-submit {
-    width: 100%;
+    margin-top: 8px;
     padding: 10px;
-    background-color: #007bff;
     border: none;
     border-radius: 5px;
+    
+    flex-grow: 1;
+    width: 100%;
+    background-color: #007bff;
+
     color: #fff;
     font-size: 16px;
     cursor: pointer;
@@ -116,16 +125,25 @@ select.form-input {
 }
 
 input[type="radio"] {
+    cursor: pointer;
     margin-bottom: 8px;
 }
 
-input[type="checkbox"] {
-    margin-bottom: 16px;
+input[type="radio"]:checked {
+    cursor: initial;
 }
 
-select[name="prog-lang"] {
-    height: auto;
-    padding: 10px;
+select.form-input {
+    padding: 0px;
+    overflow-y: hidden;
+}
+
+option {
+    padding: 4px 8px;
+}
+
+option:checked {
+    background: #007bff;
 }
 
 .form label {
@@ -136,30 +154,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     filter: invert(1);
 }
 
-::-webkit-scrollbar {
-    width: 12px;
-}
-
-::-webkit-scrollbar-track {
-    background: #2d2d2d; border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #555;
-    border-radius: 10px;
-    border: 3px solid #2d2d2d;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #777;
-}
-
 /* Status Bar */
 
 .status-bar {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 15px;
+    right: calc(50% - 200px);
     font-size: 14px;
     
     display: flex;
@@ -179,31 +179,86 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 15px;
 
+    box-sizing: border-box;
     margin-bottom: 10px;
-    padding: 5px 15px;
-    border: 1px solid #2d2d2d;
-    border-radius: 5px;
-
-    max-width: 320px;
+    padding: 10px 15px;
+    width: 400px;
+    border-radius: 10px;
 }
 
 .notification > img {
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
+}
+
+.notification-close {
+    display: block;
+    box-sizing: border-box;
+    
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    
+    padding: 2px;
+    border: 1px solid #2d2d2d;
+    border-radius: 50%;
+
+    opacity: 0;
+    background: rgba(255, 0, 0, 0.8);
+
+    cursor: pointer;
+    transition: all 0.1s linear;
+}
+
+.notification:hover .notification-close {
+    opacity: 1;
+}
+
+img.copy {
+    cursor: pointer;
+    padding: 2px;
+    box-sizing: border-box;
+}
+
+img.copy:hover {
+    background: #4f4f4f;
+    border-radius: 50%;
+    transition: all 0.1s linear;
+}
+
+.span-group {
+    display: flex;
+    flex-grow: 1;
+    justify-content: space-between;
 }
 
 .warning {
-    background-color: #66330080;
+    background-color: #530e;
+}
+
+.warning span {
+    font-weight: 500;
+    color: #fb0;
 }
 
 .error {
-    background-color: #66000080;
+    background-color: #600e;
+}
+
+.error > span {
+    color: #e00;
+    font-weight: 500;
 }
 
 .success {
-    background-color: #00442280;
+    background-color: #042e;
+}
+
+.success span {
+    font-weight: 500;
+    color: #4c0;
 }
 
 .show {
@@ -221,4 +276,115 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .error__input {
     border-color: #f44;
     box-shadow: 0 0 5px #f44;
+}
+
+/* Other */
+
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    min-height: 100vh;
+    padding: 10px 0;
+    box-sizing: border-box;
+}
+
+.switch-form {
+    padding: 5px 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-size: 14px;
+}
+
+.switch-form p {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.error-text {
+    margin: -4px 0 8px 8px;
+    font-size: 14px;
+    color: red;
+}
+
+.disabled {
+    cursor: not-allowed;
+    position: relative;
+}
+
+.disabled:hover > .edit {
+    opacity: 1;
+    transition: all 0.1s linear;
+}
+
+.disabled input, .disabled select, .disabled textarea, .disabled > label {
+    pointer-events: none;
+}
+
+.disabled input[type="date"]::-webkit-calendar-picker-indicator {
+    display: none;
+}
+
+.edit:hover {
+    border-radius: 50%;
+    background: #4f4f4f;
+}
+
+img.edit {
+    box-sizing: border-box;
+    padding: 2px;
+    height: 19px;
+    width: 19px;
+
+    position: absolute;
+    top: calc(50% - 10px);
+    right: 10px;
+    cursor: pointer;
+    
+    opacity: 0;
+    transition: all 0.1s linear;
+}
+
+textarea.form-input ~ img.edit, select.form-input ~ img.edit {
+    top: 18px;
+}
+
+.disabled:has([type="radio"]) > img.edit {
+    position: relative;
+    top: 3px;
+    left: 5px;
+}
+
+.wide {
+    width: 400px;
+}
+
+.button-group {
+    display: flex;
+    gap: 8px;
+}
+
+.exit {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    margin-top: 8px;
+    padding: 10px;
+
+    box-sizing: border-box;
+    background-color: #007bff;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+a.exit:hover {
+    background-color: #0056b3;
+}
+
+.exit > img {
+    width: 20px;
+    height: 20px;
 }
