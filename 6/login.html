@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Задание 5</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <main>
+        <div class="container">
+            <div class="form">
+                <h2>Войдите в систему</h2>
+
+                <form action="user.cgi" method="post">
+                    <input type="text" class="form-input" placeholder="Логин" id="login" name="login">
+
+                    <input type="password" class="form-input" placeholder="Пароль" id="password" name="password">
+
+                    {{ if eq .Type "onLogin" }}
+                    <p class="error-text">{{ .Error }}</p>
+                    {{ end }}
+
+                    <input type="submit" class="form-submit" value="Войти">
+
+                    <div class="switch-form">
+                        <p>Нет аккаунта?</p>
+                        <a href="user.cgi?action=register">зарегистрироваться</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    {{ if eq .Type "postRegister" }}
+    <div class="status-bar">
+        <div class="notification success">
+            <img src="img/success.png" alt="">
+
+            <span>Вы успешно зарегистрированы. <br> Для дальнейшей работы сохраните ваши данные для входа!!!</span>
+
+            <img class="notification-close" src="img/close.png">
+        </div>
+
+        <div class="notification warning">
+            <img src="img/warning.png" alt="">
+
+            <div class="span-group">
+                <span>Логин:</span>
+                <span>{{ .User.Login }}</span>
+            </div>
+
+            <img class="copy" src="img/copy.png" alt="">
+            <img class="notification-close" src="img/close.png">
+        </div>
+
+        <div class="notification warning">
+            <img src="img/warning.png" alt="">
+
+            <div class="span-group">
+                <span>Пароль:</span>
+                <span>{{ .User.Password }}</span>
+            </div>
+
+            <img class="copy" src="img/copy.png" alt="">
+            <img class="notification-close" src="img/close.png">
+        </div>
+    </div>
+    {{ end }}
+
+    {{ if eq .Type "Unauthorized" }}
+    <div class="status-bar">
+        <div class="notification error">
+            <img src="img/error.png" alt="">
+
+            <span>Обнаружен неавторизованный пользователь! Пожалуйста, войдите в систему</span>
+
+            <img class="notification-close" src="img/close.png">
+        </div>
+    </div>
+    {{ end }}
+
+    <script src="script.js"></script>
+</body>
+</html>
