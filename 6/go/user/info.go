@@ -373,8 +373,8 @@ func saveInfoHandler(w http.ResponseWriter, r *http.Request) {
 
 			response := LoginResp{
 				User: User{},
-				Error: "",
-				Type: "Unauthorized",
+				Error: "Обнаружен неавторизованный пользователь! Пожалуйста, войдите в систему",
+				Type: "Error",
 			}
 
 			tmpl.Execute(w, response)

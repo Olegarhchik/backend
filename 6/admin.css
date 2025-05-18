@@ -1,9 +1,9 @@
-input.form-submit {
+.admin.form-submit {
     background-color: #cc0000;
     transition: all 0.3s ease;
 }
 
-input.form-submit:hover {
+.admin.form-submit:hover {
     background-color: #cc0000;
     filter: brightness(0.9);
 }

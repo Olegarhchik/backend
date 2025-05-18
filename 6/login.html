@@ -68,12 +68,12 @@
     </div>
     {{ end }}
 
-    {{ if eq .Type "Unauthorized" }}
+    {{ if eq .Type "Error" }}
     <div class="status-bar">
         <div class="notification error">
             <img src="img/error.png" alt="">
 
-            <span>Обнаружен неавторизованный пользователь! Пожалуйста, войдите в систему</span>
+            <span>{{ .Error }}</span>
 
             <img class="notification-close" src="img/close.png">
         </div>

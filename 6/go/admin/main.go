@@ -10,7 +10,7 @@ func main() {
 		action := r.URL.Query().Get("action")
 
 		switch action {
-			case "admin":
+			case "manage":
 				manageHandler(w, r)
 			default:
 				loginHandler(w, r)
