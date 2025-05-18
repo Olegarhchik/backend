@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Задание 6</title>
+    <link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+    <main>
+        <div class="container">
+            <div class="form">
+                <h2>Администрирование</h2>
+
+                <form action="admin.cgi" method="post">
+                    <input type="text" class="form-input" placeholder="Логин" id="login" name="login">
+
+                    <input type="password" class="form-input" placeholder="Пароль" id="password" name="password">
+
+                    <input type="submit" class="form-submit" value="Войти">
+
+                    <div class="switch-form">
+                        <p>Вы не администратор?</p>
+                        <a href="../user.cgi">войти как пользователь</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

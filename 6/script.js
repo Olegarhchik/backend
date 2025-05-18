@@ -65,3 +65,17 @@ editButtons.forEach(button => {
         });
     });
 });
+
+const switchForm = document.querySelector('.switch-form');
+countDown = 3;
+
+switchForm.querySelector('p').addEventListener('click', () => {
+    const p = switchForm.querySelector('p');
+    const a = switchForm.querySelector('a');
+
+    if (--countDown == 0) {
+        p.innerText = 'Вы администратор?';
+        a.innerText = 'войти как админ';
+        a.setAttribute('href', 'admin.cgi');
+    }
+});
