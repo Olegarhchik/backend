@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Задание 6</title>
+    <link rel="stylesheet" href="../../style.css"> <!-- исправить путь -->
+</head>
+<body>
+    <main>
+        <div class="container">
+            <form class="users" action="admin.cgi?action=manage">
+                <h1>Управление пользователями</h1>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Логин</th>
+                            <th>ФИО</th>
+                            <th>Номер<br>телефона</th>
+                            <th>Email</th>
+                            <th>Дата<br>рождения</th>
+                            <th>Пол</th>
+                            <th>Выбранные ЯП</th>
+                            <th>Биография</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td class="login non-editable">
+                                <input type="text" value="2" readonly>
+                            </td>
+
+                            <td class="full_name editable">
+                                <input type="text" value="Атабаев Олег Константинович" readonly>
+                            </td>
+
+                            <td class="phone editable">
+                                <input type="text" value="+79996399695" readonly>
+                            </td>
+
+                            <td class="email non-editable">
+                                <input type="text" value="olegarhchik@gmail.com" readonly>
+                            </td>
+
+                            <td class="birthdate editable">
+                                <input type="text" value="2004-10-06" readonly>
+                            </td>
+
+                            <td class="gender editable">
+                                <input type="text" value="male" readonly>
+                            </td>
+
+                            <td class="proglang editable">
+                                <input type="text" value="javascript, python, java, cpp, go">
+                            </td>
+
+                            <td class="bio editable">
+                                <input type="text" value="Это моя биография" readonly>
+                            </td>
+
+                            <td class="remove">
+                                <a href="#confirm" class="remove-btn">
+                                    <img src="../img/remove.png" alt="">
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                    <tfoot>
+                        <tr>
+                            <td colspan="7">Всего пользователей: </td>
+                            <td>3</td>
+                        </tr>
+                    </tfoot>
+                </table>
+
+                <div class="admin button-group">
+                    <input type="submit" value="Сохранить данные" class="admin form-submit">
+
+                    <a class="admin exit" href="user.cgi">
+                        <img src="../img/exit.png">
+                    </a>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <form id="confirm" class="active" action="admin.cgi?action=manage" method="post">
+        <h1>Вы уверены?</h1>
+        <p>Пользователь с логином <input type="text" readonly> будет удален из системы. Действия нельзя будет отменить. Подтвердите действие</p>
+
+        <div class="button-group">
+            <a class="decline">Нет</a>
+
+            <input class="accept" type="submit" value="Да">
+        </div>
+    </form>
+
+    <script src="../admin.js"></script>
+</body>
+</html>
