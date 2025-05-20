@@ -1,9 +1,11 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"html/template"
 	"net/http"
+	"strings"
 
 	"github.com/golang-jwt/jwt/v5"
 )
@@ -51,8 +53,77 @@ func isAuthorized(r *http.Request) bool {
 	return payload.Subject == "admin"
 }
 
+func (appl *Application) writePL(db *sql.DB) error {
+	sel, err := db.Query(`
+		SELECT Name
+		FROM Abilities abs
+		JOIN ProgLang pl
+		ON pl.ProgLangID = abs.ProgLangID
+		WHERE ApplicationID = ?;
+	`, appl.Login)
+
+	if err != nil {
+		return err
+	}
+
+	defer sel.Close()
+
+	for sel.Next() {
+		pl := ""
+
+		err := sel.Scan(&pl)
+
+		if err != nil {
+			return err
+		}
+
+		appl.ProgLang = append(appl.ProgLang, pl)
+	}
+
+	return nil
+}
+
 func getApplications() ([]Application, error) {
-	return []Application{}, nil
+	appls := []Application{}
+
+	db, err := sql.Open("mysql", "u68861:1067131@/u68861")
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer db.Close()
+
+	sel, err := db.Query(`
+		SELECT *
+		FROM Application
+	`)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer sel.Close()
+
+	for sel.Next() {
+		appl := Application{}
+
+		err := sel.Scan(&appl.Login, &appl.FullName, &appl.Phone, &appl.Email, &appl.Birthdate, &appl.Gender, &appl.Bio)
+
+		if err != nil {
+			return nil, err
+		}
+
+		err = appl.writePL(db)
+
+		if err != nil {
+			return appls, err
+		}
+
+		appls = append(appls, appl)
+	}
+
+	return appls, nil
 }
 
 func getStatistics() (Statistics, error) {
@@ -72,7 +143,13 @@ func removeUser(login string) error {
 }
 
 func displayHandler (w http.ResponseWriter, r *http.Request) {
-	tmpl, err := template.ParseFiles("admin/info.html")
+	tmpl := template.New("info.html")
+
+	funcMap := template.FuncMap{
+		"join": strings.Join,
+	}
+
+	tmpl, err := tmpl.Funcs(funcMap).ParseFiles("admin/info.html")
 
 	if err != nil {
 		fmt.Fprintf(w, "При работе с шаблоном: %v", err)
@@ -100,7 +177,11 @@ func displayHandler (w http.ResponseWriter, r *http.Request) {
 		Statistics: statistics,
 	}
 
-	tmpl.Execute(w, response)
+	err = tmpl.Execute(w, response)
+
+	if err != nil {
+		fmt.Fprintf(w, "Ошибка при работе с шаблоном: %v", err)
+	}
 }
 
 func updateHandler (w http.ResponseWriter, r *http.Request) {

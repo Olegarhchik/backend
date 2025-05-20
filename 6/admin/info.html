@@ -8,7 +8,7 @@
 </head>
 <body>
     <main>
-        <div class="container" style="max-width: initial">
+        <div class="container" style="max-width: initial;">
             <form class="users" action="admin.cgi?action=manage&type=update" method="post">
                 <h1>Управление пользователями</h1>
 
@@ -27,37 +27,38 @@
                     </thead>
 
                     <tbody>
+                        {{ range $i, $user := .Applications }}
                         <tr>
                             <td class="login non-editable">
-                                <input type="text" value="2" readonly>
+                                <input type="text" value="{{ $user.Login }}" name="login[{{ $i }}]" readonly>
                             </td>
 
                             <td class="full_name editable">
-                                <input type="text" value="Атабаев Олег Константинович" readonly>
+                                <input type="text" value="{{ $user.FullName }}" name="fullname[{{ $i }}]" readonly>
                             </td>
 
                             <td class="phone editable">
-                                <input type="text" value="+79996399695" readonly>
+                                <input type="text" value="{{ $user.Phone }}" name="phone[{{ $i }}]" readonly>
                             </td>
 
                             <td class="email non-editable">
-                                <input type="text" value="olegarhchik@gmail.com" readonly>
+                                <input type="text" value="{{ $user.Email }}" name="email[{{ $i }}]" readonly>
                             </td>
 
                             <td class="birthdate editable">
-                                <input type="text" value="2004-10-06" readonly>
+                                <input type="text" value="{{ $user.Birthdate }}" name="birthdate[{{ $i }}]" readonly>
                             </td>
 
                             <td class="gender editable">
-                                <input type="text" value="male" readonly>
+                                <input type="text" value="{{ $user.Gender }}" name="gender[{{ $i }}]" readonly>
                             </td>
 
                             <td class="proglang editable">
-                                <input type="text" value="javascript, python, java, cpp, go">
+                                <input type="text" value='{{ join $user.ProgLang ", " }}' name="proglang[{{ $i }}]" readonly>
                             </td>
 
                             <td class="bio editable">
-                                <input type="text" value="Это моя биография" readonly>
+                                <input type="text" value="{{ $user.Bio }}" name="bio[{{ $i }}]" readonly>
                             </td>
 
                             <td class="remove">
@@ -66,12 +67,13 @@
                                 </a>
                             </td>
                         </tr>
+                        {{ end }}
                     </tbody>
 
                     <tfoot>
                         <tr>
                             <td colspan="7">Всего пользователей: </td>
-                            <td>3</td>
+                            <td>{{ .Statistics.ApplQuantity }}</td>
                         </tr>
                     </tfoot>
                 </table>
