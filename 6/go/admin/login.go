@@ -89,50 +89,50 @@ func grantAccessToken(w http.ResponseWriter) error {
 }
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
-	tmpl, err := template.ParseFiles("admin/login.html")
-
-	if err != nil {
-		fmt.Fprintf(w, "Ошибка при работе с шаблоном: %v", err)
-	}
-
-	response := Admin{}
-
-	if r.Method == http.MethodPost {
-		response.Login = r.FormValue("login")
-		response.Password = r.FormValue("password")
-
-		correct, err := dataCorrect(response)
+	if r.Method != http.MethodPost {
+		tmpl, err := template.ParseFiles("admin/login.html")
 
 		if err != nil {
-			fmt.Fprintf(w, "Ошибка при работе с базой данных: %v", err)
-		}
-
-		if correct {
-			err := grantAccessToken(w)
-
-			if err != nil {
-				fmt.Fprintf(w, "Ошибка при создании токена: %v", err)
-				return
-			}
-
-			manageHandler(w, r)
-			return
-		} else {
-			tmpl, err := template.ParseFiles("login.html")
-
-			if err != nil {
-				fmt.Fprintf(w, "Ошибка при работе с шаблоном: %v", err)
-			}
-
-			response := LoginResp{
-				Type: "Error",
-				Error: "Пользователь не администратор! Введите ваши данные еще раз",
-			}
-
-			tmpl.Execute(w, response)
+			fmt.Fprintf(w, "Ошибка при работе с шаблоном: %v", err)
 			return
 		}
+
+		tmpl.Execute(w, nil)
+		return
 	}
 
-	tmpl.Execute(w, response)
+	response := Admin{
+		Login: r.FormValue("login"),
+		Password: r.FormValue("password"),
+	}
+
+	correct, err := dataCorrect(response)
+
+	if err != nil {
+		fmt.Fprintf(w, "Ошибка при работе с базой данных: %v", err)
+	}
+
+	if correct {
+		err := grantAccessToken(w)
+
+		if err != nil {
+			fmt.Fprintf(w, "Ошибка при создании токена: %v", err)
+			return
+		}
+
+		displayHandler(w, r)
+	} else {
+		tmpl, err := template.ParseFiles("login.html")
+
+		if err != nil {
+			fmt.Fprintf(w, "Ошибка при работе с шаблоном: %v", err)
+		}
+
+		response := LoginResp{
+			Type: "Error",
+			Error: "Пользователь не администратор! Введите ваши данные еще раз",
+		}
+
+		tmpl.Execute(w, response)
+	}
 }

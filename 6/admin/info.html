@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Задание 6</title>
-    <link rel="stylesheet" href="../../style.css"> <!-- исправить путь -->
+    <link rel="stylesheet" href="../style.css"> 
 </head>
 <body>
     <main>
-        <div class="container">
-            <form class="users" action="admin.cgi?action=manage">
+        <div class="container" style="max-width: initial">
+            <form class="users" action="admin.cgi?action=manage&type=update" method="post">
                 <h1>Управление пользователями</h1>
 
                 <table>
@@ -62,7 +62,7 @@
 
                             <td class="remove">
                                 <a href="#confirm" class="remove-btn">
-                                    <img src="../img/remove.png" alt="">
+                                    <img src="img/remove.png" alt="">
                                 </a>
                             </td>
                         </tr>
@@ -80,14 +80,14 @@
                     <input type="submit" value="Сохранить данные" class="admin form-submit">
 
                     <a class="admin exit" href="user.cgi">
-                        <img src="../img/exit.png">
+                        <img src="img/exit.png">
                     </a>
                 </div>
             </form>
         </div>
     </main>
 
-    <form id="confirm" class="active" action="admin.cgi?action=manage" method="post">
+    <form id="confirm" class="active" action="admin.cgi?action=manage&type=remove" method="post">
         <h1>Вы уверены?</h1>
         <p>Пользователь с логином <input type="text" readonly> будет удален из системы. Действия нельзя будет отменить. Подтвердите действие</p>
 
@@ -98,6 +98,6 @@
         </div>
     </form>
 
-    <script src="../admin.js"></script>
+    <script src="admin.js"></script>
 </body>
 </html>

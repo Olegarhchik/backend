@@ -1,7 +1,3 @@
-.container {
-    max-width: initial !important;
-}
-
 .admin.form-submit, .admin.exit {
     background-color: #cc0000;
     transition: all 0.3s ease;
