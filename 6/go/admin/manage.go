@@ -19,7 +19,7 @@ type (
 
 	Statistics struct {
 		ApplQuantity int
-		ProgLang []int
+		ProgLang map[string]int
 	}
 
 	displayResponse struct {
@@ -122,7 +122,45 @@ func getApplications() ([]Application, error) {
 }
 
 func getStatistics() (Statistics, error) {
-	return Statistics{}, nil
+	statistics := Statistics{
+		ProgLang: make(map[string]int),
+	}
+
+	db, err := sql.Open("mysql", "u68861:1067131@/u68861")
+
+	if err != nil {
+		return statistics, err
+	}
+
+	defer db.Close()
+
+	sel, err := db.Query(`
+		SELECT Name, COUNT(*)
+		FROM Abilities abs
+		JOIN ProgLang pl
+		ON pl.ProgLangID = abs.ProgLangID
+		GROUP BY Name;
+	`)
+
+	if err != nil {
+		return statistics, err
+	}
+
+	defer sel.Close()
+
+	for sel.Next() {
+		pl, count := "", 0
+
+		err := sel.Scan(&pl, &count)
+
+		if err != nil {
+			return statistics, err
+		}
+
+		statistics.ProgLang[pl] = count
+	}
+
+	return statistics, nil
 }
 
 func parseApplications(r *http.Request) []Application {

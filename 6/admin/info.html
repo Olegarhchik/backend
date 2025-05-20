@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Задание 6</title>
-    <link rel="stylesheet" href="../style.css"> 
+    <link rel="stylesheet" href="../style.css">
 </head>
 <body>
     <main>
@@ -81,6 +81,23 @@
                         </tr>
                     </tfoot>
                 </table>
+
+                {{ $quantity := .Statistics.ApplQuantity }}
+                {{ if ne $quantity 0 }}
+                <h1>Статистика</h1>
+
+                <div class="statistics">
+                    <div class="window">
+                    {{ range $key, $value := .Statistics.ProgLang }}
+                        <div class="column">
+                            <span>{{ $value }}</span>
+                            <div class="fill" style="height: calc({{ $value }} / {{ $quantity }} * 100%);"></div>
+                            <span>{{ $key }}</span>
+                        </div>
+                    {{ end }}
+                    </div>
+                </div>
+                {{ end }}
 
                 <div class="admin button-group">
                     <input type="submit" value="Сохранить данные" class="admin form-submit">

@@ -133,7 +133,7 @@ tfoot td:last-child {
 #confirm {
     height: 180px;
     width: 350px;
-    position: absolute;
+    position: fixed;
     top: calc(50vh - 220px);
     left: calc(50vw - 225px);
     z-index: -1;
@@ -151,6 +151,7 @@ tfoot td:last-child {
 
 body:has(#confirm:target) {
     pointer-events: none;
+    overflow: hidden;
 }
 
 #confirm:target {
@@ -235,4 +236,57 @@ body:has(#confirm:target)::after {
     font-style: italic;
     opacity: 0.5;
     letter-spacing: 2px;
+}
+
+.statistics {
+    max-width: 800px;
+    margin: 0 auto;
+    border-radius: 10px;
+    background: #777777;
+    padding: 50px;
+    padding-bottom: 100px;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.statistics:after {
+    content: "";
+    display: block;
+    height: 2px;
+    width: 100%;
+    background-color: #ffffff;
+}
+
+.window {
+    display: flex;
+    height: 300px;
+    justify-content: space-around;
+}
+
+.column {
+    position: relative;
+    height: 100%;
+    width: 35px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.column > span {
+    color: #ffffff;
+    text-align: center;
+    font-weight: 700;
+}
+
+.column > span:last-child {
+    width: 35px;
+    position: absolute;
+    bottom: -40px;
+    transform: rotate(60deg);
+}
+
+.fill {
+    background-color: #cc0000;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
 }
