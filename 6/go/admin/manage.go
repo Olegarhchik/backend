@@ -138,7 +138,53 @@ func updateApplication(appl Application) {
 	
 }
 
+func removeRow(table string, key string, value string) error {
+	db, err := sql.Open("mysql", "u68861:1067131@/u68861")
+
+	if err != nil {
+		return err
+	}
+
+	defer db.Close()
+
+	_, err = db.Exec(fmt.Sprintf(`
+		DELETE FROM %s
+		WHERE %s = ?;
+	`, table, key), value)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func removeUser(login string) error {
+	db, err := sql.Open("mysql", "u68861:1067131@/u68861")
+
+	if err != nil {
+		return err
+	}
+
+	defer db.Close()
+
+	data := [][]string{
+		{"User", "Login"},
+		{"Abilities", "ApplicationID"},
+		{"Application", "ApplicationID"},
+	}
+
+	for _, tr := range data {
+		table := tr[0]
+		key := tr[1]
+
+		err := removeRow(table, key, login)
+
+		if err != nil {
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -152,21 +198,21 @@ func displayHandler (w http.ResponseWriter, r *http.Request) {
 	tmpl, err := tmpl.Funcs(funcMap).ParseFiles("admin/info.html")
 
 	if err != nil {
-		fmt.Fprintf(w, "При работе с шаблоном: %v", err)
+		fmt.Fprintf(w, "Ошибка при работе с шаблоном: %v", err)
 		return
 	}
 
 	appls, err := getApplications()
 
 	if err != nil {
-		fmt.Fprintf(w, "При при работе с базой данных: %v", err)
+		fmt.Fprintf(w, "Ошибка при работе с базой данных: %v", err)
 		return
 	}
 
 	statistics, err := getStatistics()
 
 	if err != nil {
-		fmt.Fprintf(w, "При при работе с базой данных: %v", err)
+		fmt.Fprintf(w, "Ошибка при работе с базой данных: %v", err)
 		return
 	}
 
@@ -189,7 +235,7 @@ func updateHandler (w http.ResponseWriter, r *http.Request) {
 		tmpl, err := template.ParseFiles("login.html")
 
 		if err != nil {
-			fmt.Fprintf(w, "При работе с шаблоном: %v", err)
+			fmt.Fprintf(w, "Ошибка при работе с шаблоном: %v", err)
 			return
 		}
 		
@@ -216,7 +262,7 @@ func removeHandler (w http.ResponseWriter, r *http.Request) {
   		tmpl, err := template.ParseFiles("login.html")
 
 		if err != nil {
-			fmt.Fprintf(w, "При работе с шаблоном: %v", err)
+			fmt.Fprintf(w, "Ошибка при работе с шаблоном: %v", err)
 			return
 		}
 
@@ -234,7 +280,7 @@ func removeHandler (w http.ResponseWriter, r *http.Request) {
 	err := removeUser(login)
 
 	if err != nil {
-		fmt.Fprintf(w, "При работе с базой данных: %v", err)
+		fmt.Fprintf(w, "Ошибка при работе с базой данных: %v", err)
 		return
 	}
 
@@ -260,7 +306,7 @@ func manageHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := template.ParseFiles("login.html")
 
 	if err != nil {
-		fmt.Fprintf(w, "При работе с шаблоном: %v", err)
+		fmt.Fprintf(w, "Ошибка при работе с шаблоном: %v", err)
 		return
 	}
 
