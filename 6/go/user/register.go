@@ -122,23 +122,6 @@ func generatePassword(length int) string {
 	return password
 }
 
-func increaseByOne(str string) string {
-	digits := "0123456789"
-	res := ""
-
-	p := len(str) - 1
-
-	for str[p] == '9' {
-		res += "0"
-		p--
-	}
-
-	q := strings.Index(digits, string(str[p])) + 1
-	res = string(digits[q]) + res
-
-	return str[:p] + res
-}
-
 func generateLogin() (string, error) {
 	db, err := sql.Open("mysql", "u68861:1067131@/u68861")
 
@@ -149,7 +132,12 @@ func generateLogin() (string, error) {
 	defer db.Close()
 
 	lastLogin := "0"
-	sel, err := db.Query("SELECT Login FROM User ORDER BY Login DESC LIMIT 1")
+
+	sel, err := db.Query(`
+		SELECT AUTO_INCREMENT
+		FROM information_schema.TABLES
+		WHERE TABLE_NAME = 'Application';
+	`)
 
 	if err != nil {
 		return "", err
@@ -165,7 +153,7 @@ func generateLogin() (string, error) {
 		}
 	}
 
-	return increaseByOne("u" + strings.Repeat("0", 6 - len(lastLogin)) + lastLogin), nil
+	return "u" + strings.Repeat("0", 6 - len(lastLogin)) + lastLogin, nil
 }
 
 func createUser(email string) (User, error) {
