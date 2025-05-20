@@ -226,3 +226,13 @@ body:has(#confirm:target)::after {
     z-index: 1;
     pointer-events: none;
 }
+
+.no-users {
+    text-align: center;
+    text-transform: uppercase;
+    padding: 10px 0;
+    font-weight: 700;
+    font-style: italic;
+    opacity: 0.5;
+    letter-spacing: 2px;
+}

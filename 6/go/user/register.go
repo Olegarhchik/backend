@@ -10,6 +10,8 @@ import (
 	"regexp"
 	"strings"
 
+	"shared"
+
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -30,31 +32,6 @@ type (
 		Email string
 	}
 )
-
-func insValues(table string, cols string, values ...string) error {
-	db, err := sql.Open("mysql", "u68861:1067131@/u68861")
-
-	if err != nil {
-		return err
-	}
-
-	defer db.Close()
-
-	for i, value := range values {
-		values[i] = "'" + value + "'"
-	}
-
-	_, err = db.Exec(fmt.Sprintf(`
-		INSERT INTO %s(%s)
-		VALUES (%s)
-	`, table, cols, strings.Join(values, ", ")))
-
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
 
 func validateEmail(email string) string {
 	pattern := `^[A-Za-z][\w\.]+@\w+\.[a-z]+$`
@@ -209,7 +186,7 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// добавление пользователя в базу данных
-		err = insValues("User", "Password, Email", fmt.Sprintf("%x", sha256.Sum256([]byte(response.User.Password))), response.User.Email)
+		err = shared.InsValues("User", "Password, Email", fmt.Sprintf("%x", sha256.Sum256([]byte(response.User.Password))), response.User.Email)
 		response.Type = "postRegister"
 
 		if err != nil {

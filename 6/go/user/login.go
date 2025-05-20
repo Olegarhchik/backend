@@ -9,6 +9,8 @@ import (
 	"regexp"
 	"time"
 
+	"shared"
+
 	jwt "github.com/golang-jwt/jwt/v5"
 )
 
@@ -29,15 +31,7 @@ type (
 		Bio string
 	}
 
-	Info struct {
-		FullName string
-		Phone string
-		Email string
-		Birthdate string
-		Gender string
-		ProgLang []string
-		Bio string
-	}
+	Info = shared.Application
 
 	Payload struct {
 		Email string
@@ -110,66 +104,6 @@ func checkData(user User) (string, error) {
 	}
 }
 
-func getUser(id string) (Info, error) {
-	info := Info{}
-
-	db, err := sql.Open("mysql", "u68861:1067131@/u68861")
-
-	if err != nil {
-		return info, err
-	}
-
-	defer db.Close()
-
-	sel, err := db.Query(fmt.Sprintf(`
-		SELECT FullName, PhoneNumber, APPL.Email, Birthdate, Gender, Biography
-		FROM Application APPL
-		JOIN User U ON ApplicationID = Login
-		WHERE APPL.ApplicationID = '%s';
-	`, id))
-
-	if err != nil {
-		return info, err
-	}
-
-	defer sel.Close()
-
-	for sel.Next() {
-		err := sel.Scan(&info.FullName, &info.Phone, &info.Email, &info.Birthdate, &info.Gender, &info.Bio)
-
-		if err != nil {
-			return info, err
-		}
-	}
-
-	sel, err = db.Query(fmt.Sprintf(`
-		SELECT Name
-		FROM ProgLang PL
-		JOIN Abilities A
-		ON PL.ProgLangID = A.ProgLangID
-		WHERE A.ApplicationID = '%s';
-	`, id));
-
-	if err != nil {
-		return info, err
-	}
-
-	defer sel.Close()
-
-	for sel.Next() {
-		var pl string
-		err := sel.Scan(&pl)
-
-		if err != nil {
-			return info, err
-		}
-
-		info.ProgLang = append(info.ProgLang, pl)
-	}
-
-	return info, nil
-}
-
 func getEmail(login string) (string, error) {
 	id := extractID(login)
 	email := ""
@@ -206,7 +140,7 @@ func getEmail(login string) (string, error) {
 }
 
 func updateUser(response *InfoResp, login string) error {
-	info, err := getUser(extractID(login))
+	info, err := shared.GetUser(extractID(login))
 	errors := Errors{}
 
 	if err != nil {

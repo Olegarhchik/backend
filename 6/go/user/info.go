@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"regexp"
 
+	"shared"
+
 	"github.com/golang-jwt/jwt/v5"
 )
 
@@ -119,125 +121,16 @@ func getIdByEmail(email string) (string, error) {
 	return id, nil
 }
 
-func updateCol(column string, newValue string, IDName string, ID string, table string) error {
-	db, err := sql.Open("mysql", "u68861:1067131@/u68861")
-
-	if err != nil {
-		return err
-	}
-
-	defer db.Close()
-
-	_, err = db.Exec(fmt.Sprintf(`
-		UPDATE %s
-		SET %s = '%s'
-		WHERE %s = '%s';
-	`, table, column, newValue, IDName, ID))
-
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func getPLID(PLName string) (string, error) {
-	PLID := ""
-
-	db, err := sql.Open("mysql", "u68861:1067131@/u68861")
-
-	if err != nil {
-		return PLID, err
-	}
-
-	defer db.Close()
-
-	sel, err := db.Query(fmt.Sprintf(`
-		SELECT ProgLangID
-		FROM ProgLang
-		WHERE Name = '%s';
-	`, PLName))
-
-	if err != nil {
-		return PLID, err
-	}
-
-	defer sel.Close()
-
-	for sel.Next() {
-		err := sel.Scan(&PLID)
-
-		if err != nil {
-    		return PLID, err
-  		}
-	}
-
-	return PLID, nil
-}
-
-func insertPL(applID string, PLName string) error {
-	PLID, err := getPLID(PLName)
-
-	if err != nil {
-		return err
-	}
-
-	db, err := sql.Open("mysql", "u68861:1067131@/u68861")
-
-	if err != nil {
-		return err
-	}
-
-	defer db.Close()
-
-	return insValues("Abilities", "ApplicationID, ProgLangID", applID, PLID)
-}
-
-func deletePL(applID string, PLName string) error {
-	PLID, err := getPLID(PLName)
-
-	if err != nil {
-		return err
-	}
-
-	db, err := sql.Open("mysql", "u68861:1067131@/u68861")
-
-	if err != nil {
-		return err
-	}
-
-	_, err = db.Exec(fmt.Sprintf(`
-		DELETE FROM Abilities
-		WHERE ApplicationID = '%s' AND ProgLangID = '%s';
-	`, applID, PLID))
-
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func contains(array []string, elem string) bool {
-	for _, v := range array {
-		if v == elem {
-			return true
-		}
-	}
-
-	return false
-}
-
 func updateDB(oldInfo Info, newInfo Info, id string) error {
 	if oldInfo.FullName == "" {
-		err := insValues("Application", "ApplicationID, FullName, PhoneNumber, Email, Birthdate, Gender, Biography", id, newInfo.FullName, newInfo.Phone, newInfo.Email, newInfo.Birthdate, newInfo.Gender, newInfo.Bio)
+		err := shared.InsValues("Application", "ApplicationID, FullName, PhoneNumber, Email, Birthdate, Gender, Biography", id, newInfo.FullName, newInfo.Phone, newInfo.Email, newInfo.Birthdate, newInfo.Gender, newInfo.Bio)
 
 		if err != nil {
 			return err
 		}
 
 		for _, pl := range newInfo.ProgLang {
-			err := insertPL(id, pl)
+			err := shared.InsertPL(id, pl)
 
 			if err != nil {
 				return err
@@ -247,71 +140,13 @@ func updateDB(oldInfo Info, newInfo Info, id string) error {
 		return nil
 	}
 
-	if oldInfo.FullName != newInfo.FullName {
-		err := updateCol("FullName", newInfo.FullName, "ApplicationID", id, "Application")
-
-		if err != nil {
-			return err
-		}
-	}
-
-	if oldInfo.Phone != newInfo.Phone {
-		err := updateCol("PhoneNumber", newInfo.Phone, "ApplicationID", id, "Application")
-
-		if err != nil {
-			return err
-		}
-	}
-
-	if oldInfo.Birthdate != newInfo.Birthdate {
-		err := updateCol("Birthdate", newInfo.Birthdate, "ApplicationID", id, "Application")
-
-		if err != nil {
-			return err
-		}
-	}
-
-	if oldInfo.Gender != newInfo.Gender {
-		err := updateCol("Gender", newInfo.Gender, "ApplicationID", id, "Application")
-
-		if err != nil {
-			return err
-		}
-	}
-
-	if oldInfo.Bio != newInfo.Bio {
-		err := updateCol("Biography", newInfo.Bio, "ApplicationID", id, "Application")
-
-		if err != nil {
-			return err
-		}
-	}
-
-	for _, pl := range newInfo.ProgLang {
-		if (!contains(oldInfo.ProgLang, pl)) {
-			err := insertPL(id, pl)
-
-			if err != nil {
-				return err
-			}
-		}
-	}
-
-	for _, pl := range oldInfo.ProgLang {
-		if (!contains(newInfo.ProgLang, pl)) {
-			err := deletePL(id, pl)
-
-			if err != nil {
-				return err
-			}
-		}
-	}
+	shared.UpdateCols(oldInfo, newInfo, id)
 
 	return nil
 }
 
 func applyChanges(info Info, id string) error {
-	oldInfo, err := getUser(id)
+	oldInfo, err := shared.GetUser(id)
 
 	if err != nil {
 		return err

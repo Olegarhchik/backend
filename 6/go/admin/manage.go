@@ -7,19 +7,14 @@ import (
 	"net/http"
 	"strings"
 
+	"shared"
+
 	"github.com/golang-jwt/jwt/v5"
 )
 
 type (
 	Application struct {
-		Login string
-		FullName string
-		Phone string
-		Email string
-		Birthdate string
-		Gender string
-		ProgLang []string
-		Bio string
+		shared.Application
 	}
 
 	Statistics struct {
@@ -131,11 +126,50 @@ func getStatistics() (Statistics, error) {
 }
 
 func parseApplications(r *http.Request) []Application {
-	return []Application{}
+	appls := []Application{}
+
+	r.ParseForm()
+
+	for i := 0;; i++ {
+		ind := fmt.Sprintf("[%d]", i)
+
+		appl := Application{
+			shared.Application {
+				Login: r.Form.Get("login" + ind),
+				FullName: r.Form.Get("fullname" + ind),
+				Phone: r.Form.Get("phone" + ind),
+				Email: r.Form.Get("email" + ind),
+				Birthdate: r.Form.Get("birthdate" + ind),
+				Gender: r.Form.Get("gender" + ind),
+				ProgLang: strings.Split(r.Form.Get("proglang" + ind), ", "),
+				Bio: r.Form.Get("bio" + ind),
+			},
+		}
+
+		if appl.Login == "" {
+			break
+		}
+
+		appls = append(appls, appl)
+	}
+
+	return appls
 }
 
-func updateApplication(appl Application) {
-	
+func updateApplication(newAppl Application) error {
+	oldAppl, err := shared.GetUser(newAppl.Login)
+
+	if err != nil {
+		return err
+	}
+
+	err = shared.UpdateCols(oldAppl, newAppl.Application, newAppl.Login)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func removeRow(table string, key string, value string) error {
@@ -251,7 +285,12 @@ func updateHandler (w http.ResponseWriter, r *http.Request) {
 	appls := parseApplications(r)
 
 	for _, appl := range appls {
-		updateApplication(appl)
+		err := updateApplication(appl)
+
+		if err != nil {
+			fmt.Fprintf(w, "Ошибка при работе с базой данных: %v", err)
+			return
+		}
 	}
 
 	displayHandler(w, r)
