@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Задание 6</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <main>
+        <div class="container" style="max-width: initial;">
+            <form class="users" action="admin.cgi?action=manage&type=update" method="post">
+                <h1>Управление пользователями</h1>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Логин</th>
+                            <th>ФИО</th>
+                            <th>Номер<br>телефона</th>
+                            <th>Email</th>
+                            <th>Дата<br>рождения</th>
+                            <th>Пол</th>
+                            <th>Выбранные ЯП</th>
+                            <th>Биография</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {{ range $i, $user := .Applications }}
+                        <tr>
+                            <td class="login non-editable">
+                                <input type="text" value="{{ $user.Login }}" name="login[{{ $i }}]" readonly>
+                            </td>
+
+                            <td class="full_name editable">
+                                <input type="text" value="{{ $user.FullName }}" name="fullname[{{ $i }}]" readonly>
+                            </td>
+
+                            <td class="phone editable">
+                                <input type="text" value="{{ $user.Phone }}" name="phone[{{ $i }}]" readonly>
+                            </td>
+
+                            <td class="email non-editable">
+                                <input type="text" value="{{ $user.Email }}" name="email[{{ $i }}]" readonly>
+                            </td>
+
+                            <td class="birthdate editable">
+                                <input type="text" value="{{ $user.Birthdate }}" name="birthdate[{{ $i }}]" readonly>
+                            </td>
+
+                            <td class="gender editable">
+                                <input type="text" value="{{ $user.Gender }}" name="gender[{{ $i }}]" readonly>
+                            </td>
+
+                            <td class="proglang editable">
+                                <input type="text" value='{{ join $user.ProgLang ", " }}' name="proglang[{{ $i }}]" readonly>
+                            </td>
+
+                            <td class="bio editable">
+                                <input type="text" value="{{ $user.Bio }}" name="bio[{{ $i }}]" readonly>
+                            </td>
+
+                            <td class="remove">
+                                <a href="#confirm" class="remove-btn">
+                                    <img src="img/remove.png" alt="">
+                                </a>
+                            </td>
+                        </tr>
+                        {{ else }}
+                        <tr>
+                            <td class="no-users" colspan="8">Пользователей нет</td>
+                        </tr>
+                        {{ end }}
+                    </tbody>
+
+                    <tfoot>
+                        <tr>
+                            <td colspan="7">Всего пользователей: </td>
+                            <td>{{ .Statistics.ApplQuantity }}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+
+                {{ $quantity := .Statistics.ApplQuantity }}
+                {{ if ne $quantity 0 }}
+                <h1>Статистика</h1>
+
+                <div class="statistics">
+                    <div class="window">
+                    {{ range $key, $value := .Statistics.ProgLang }}
+                        <div class="column">
+                            <span>{{ $value }}</span>
+                            <div class="fill" style="height: calc({{ $value }} / {{ $quantity }} * 100%);"></div>
+                            <span>{{ $key }}</span>
+                        </div>
+                    {{ end }}
+                    </div>
+                </div>
+                {{ end }}
+
+                <div class="admin button-group">
+                    <input type="submit" value="Сохранить данные" class="admin form-submit">
+
+                    <a class="admin exit" href="user.cgi">
+                        <img src="img/exit.png">
+                    </a>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <form id="confirm" class="active" action="admin.cgi?action=manage&type=remove" method="post">
+        <h1>Вы уверены?</h1>
+        <p>Пользователь с логином <input type="text" name="login" readonly> будет удален из системы. Действие нельзя будет отменить</p>
+
+        <div class="button-group">
+            <a class="decline">Нет</a>
+
+            <input class="accept" type="submit" value="Да">
+        </div>
+    </form>
+
+    <script src="admin.js"></script>
+</body>
+</html>

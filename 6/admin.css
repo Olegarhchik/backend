@@ -1,0 +1,292 @@
+.admin.form-submit, .admin.exit {
+    background-color: #cc0000;
+    transition: all 0.3s ease;
+}
+
+.admin.form-submit:hover, .admin.exit:hover {
+    background-color: rgba(204, 0, 0, 0.8);
+}
+
+table {
+    border-collapse: collapse;
+}
+
+thead, tfoot {
+    letter-spacing: 1px;
+    background-color: #777;
+    text-transform: uppercase;
+}
+
+th, tfoot td {
+    padding: 5px 20px;
+}
+
+td.login > input, td.email > input {
+    text-align: center;
+}
+
+td > input {
+    padding: 10px 10px;
+}
+
+th, td {
+    border-left: 1px solid #282828;
+    border-right: 1px solid #282828;
+}
+
+tfoot td:first-child {
+    text-align: right;
+}
+
+tfoot td:last-child {
+    text-align: center;
+}
+
+tfoot td {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-weight: 700;
+}
+
+tbody > tr:nth-child(odd) {
+    background-color: #282828;
+}
+
+.admin.button-group {
+    margin-top: 10px;
+    padding: 0 40%;
+}
+
+.users input {
+    box-sizing: border-box;
+    background: transparent;
+    border: none;
+    font-size: 16px;
+    width: 100%;
+}
+
+.users input:focus {
+    outline: none;
+}
+
+.users .editable > input {
+    cursor: url(img/edit.png), auto;
+}
+
+.users .non-editable > input {
+    cursor: not-allowed;
+}
+
+.users .login > input, .users .gender > input {
+    width: 100px;
+}
+
+.users .birthdate > input, .users .phone > input {
+    width: 150px;
+}
+
+th:first-child {
+    border-top-left-radius: 10px;
+}
+
+th:last-child {
+    border-top-right-radius: 10px;
+}
+
+tfoot td:first-child {
+    border-bottom-left-radius: 10px;
+}
+
+tfoot td:last-child {
+    border-bottom-right-radius: 10px;
+}
+
+.remove-btn {
+    transform: scale(0.8);
+    opacity: 0;
+    z-index: -1;
+    position: absolute;
+    top: 3px;
+    left: -35px;
+    background-color: #cc0000;
+    border-radius: 50%;
+    padding: 5px;
+    display: inline-block;
+    height: 24px;
+    transition: all 0.1s linear;
+}
+
+.remove:hover a {
+    z-index: 1;
+    opacity: 1;
+    left: 3px;
+}
+
+.remove {
+    position: relative;
+    width: 40px;
+    text-align: center;
+    background: #1d1d1d;
+    border-right: none;
+}
+
+#confirm {
+    height: 180px;
+    width: 350px;
+    position: fixed;
+    top: calc(50vh - 220px);
+    left: calc(50vw - 225px);
+    z-index: -1;
+    opacity: 0;
+    transition: all 0.1s linear;
+    background-color: #282828;
+    padding: 20px 50px;
+    border-radius: 10px;
+    border: 2px solid #cc0000;
+}
+
+#confirm h1 {
+    margin-top: 0;
+}
+
+body:has(#confirm:target) {
+    pointer-events: none;
+    overflow: hidden;
+}
+
+#confirm:target {
+    z-index: 2;
+    opacity: 1;
+    top: calc(50vh - 110px);
+    pointer-events: initial;
+}
+
+#confirm input[type="text"]:focus {
+    outline: none;
+}
+
+#confirm input[type="text"] {
+    background: transparent;
+    border: none;
+    width: 10px;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+#confirm p {
+    text-align: justify;
+}
+
+#confirm .button-group {
+    justify-content: space-around;
+    margin-top: 21px;
+}
+
+#confirm .button-group a, #confirm .button-group input[type="submit"] {
+    background-color: #cc0000;
+    text-decoration: none;
+    padding: 5px 50px;
+    border-radius: 5px;
+    border: 2px solid #c00;
+    transition: all 0.1s linear;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#confirm a.decline {
+    background-color: #fff;
+    color: #c00;
+}
+
+#confirm a.decline:hover {
+    background-color: #c00;
+    color: #fff;
+}
+
+#confirm input.accept:hover {
+    background-color: #fff;
+    color: #c00;
+}
+
+body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+body:has(#confirm:target)::after {
+    opacity: 1;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.no-users {
+    text-align: center;
+    text-transform: uppercase;
+    padding: 10px 0;
+    font-weight: 700;
+    font-style: italic;
+    opacity: 0.5;
+    letter-spacing: 2px;
+}
+
+.statistics {
+    max-width: 800px;
+    margin: 0 auto;
+    border-radius: 10px;
+    background: #777777;
+    padding: 50px;
+    padding-bottom: 100px;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.statistics:after {
+    content: "";
+    display: block;
+    height: 2px;
+    width: 100%;
+    background-color: #ffffff;
+}
+
+.window {
+    display: flex;
+    height: 300px;
+    justify-content: space-around;
+}
+
+.column {
+    position: relative;
+    height: 100%;
+    width: 35px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.column > span {
+    color: #ffffff;
+    text-align: center;
+    font-weight: 700;
+}
+
+.column > span:last-child {
+    width: 35px;
+    position: absolute;
+    bottom: -40px;
+    transform: rotate(60deg);
+}
+
+.fill {
+    background-color: #cc0000;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
